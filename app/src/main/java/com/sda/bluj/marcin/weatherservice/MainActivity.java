@@ -94,21 +94,33 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-//    public void displayData(View view) {
-//        if (view instanceof Button) {
-//            Button button = (Button) view;
-//            getData(button);
-//
-//        }
-//    }
-//
-//    private void getData(Button button) {
-//        WeatherAsyncTask weatherAsyncTask = new WeatherAsyncTask(button.getText().toString());
-//        weatherAsyncTask.setMainActivity(this);
-//        weatherAsyncTask.execute();
-//    }
-//
-//    public void setWeather(Weather weather) {
-//        this.weather = weather;
-//    }
+    public void displayData(View view) {
+        String city;
+        switch (view.getId()) {
+            case R.id.first_button:
+                city = "Wroclaw";
+                break;
+            case R.id.second_button:
+                city = "Warszawa";
+                break;
+            case R.id.third_button:
+                city = "Krakow";
+                break;
+            default:
+                city = "Wroclaw";
+                break;
+        }
+        weatherAsyncTask = new WeatherAsyncTask(city);
+        weatherAsyncTask.setMainActivity(this);
+        weatherAsyncTask.execute();
+
+//        mDate = weather.getDate();
+//        mPressure = weather.getPressure();
+//        mCity = city;
+//        mTemperature = weather.getTemperature();
+    }
+
+    public void setWeather(Weather weather) {
+        this.weather = weather;
+    }
 }

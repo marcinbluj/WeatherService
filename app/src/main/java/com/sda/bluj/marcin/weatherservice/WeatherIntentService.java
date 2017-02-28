@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import org.json.JSONObject;
+
+import okhttp3.Request;
+
 /**
  * Created by RENT on 2017-02-28.
  */
@@ -40,5 +44,15 @@ public class WeatherIntentService extends IntentService {
 
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
         broadcastManager.sendBroadcast(intent);
+    }
+
+    private JSONObject sendRequest(String city) {
+        Request.Builder builder = new Request.Builder();
+        builder.url("");
+        builder.get();
+
+        Request request = builder.build();
+
+        return new JSONObject();
     }
 }
