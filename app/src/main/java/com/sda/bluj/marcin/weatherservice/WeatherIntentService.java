@@ -32,7 +32,6 @@ public class WeatherIntentService extends IntentService {
 
         if (intent != null) {
             final String action = intent.getAction();
-            Log.i("WeatherService", intent.getAction());
             if ("GET_WEATHER".equals(action)) {
                 String city = intent.getStringExtra("CITY");
                 try {
@@ -108,31 +107,4 @@ public class WeatherIntentService extends IntentService {
 
         return weather;
     }
-
-//    @Override
-//    public void onCreate() {
-//        super.onCreate();
-//
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        long alarmTime = getAlarmTime();
-//        PendingIntent pendingIntent = getAlarmPendingIntent();
-//        alarmManager.set(AlarmManager.RTC, alarmTime, pendingIntent);
-//        alarmManager.setRepeating(AlarmManager.RTC, alarmTime, 60L * 1000L, pendingIntent);
-//        alarmManager.cancel(pendingIntent);
-//    }
-//
-//    private long getAlarmTime() {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.set(Calendar.HOUR_OF_DAY, 15);
-//        calendar.set(Calendar.MINUTE, 38);
-//        calendar.set(Calendar.SECOND, 0);
-//        return calendar.getTimeInMillis();
-//    }
-//
-//    private PendingIntent getAlarmPendingIntent() {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent,
-//                PendingIntent.FLAG_CANCEL_CURRENT);
-//        return pendingIntent;
-//    }
 }

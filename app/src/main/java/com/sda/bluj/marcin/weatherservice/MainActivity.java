@@ -1,5 +1,7 @@
 package com.sda.bluj.marcin.weatherservice;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -103,6 +105,51 @@ public class MainActivity extends AppCompatActivity {
             startService(intent);
         }
 
+    }
+
+    public void alarmStartStop (View view) {
+        switch (view.getId()) {
+            case R.id.start:
+                startAlarm();
+                break;
+            case R.id.stop:
+                stopAlarm();
+                break;
+        }
+    }
+
+    private void startAlarm() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        Intent intent = createServiceIntent();
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        long startTime = System.currentTimeMillis();
+        long interval = 60 * 1000;
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, interval, pendingIntent);
+    }
+
+    private void stopAlarm() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        Intent intent = createServiceIntent();
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmManager.cancel(pendingIntent);
+    }
+
+    private Intent createServiceIntent() {
+        Intent intent;
+        String city = inputText.getText().toString();
+
+        if (!city.isEmpty()) {
+            intent = new Intent(this, WeatherIntentService.class);
+            intent.setAction("GET_WEATHER");
+            intent.putExtra("CITY", city);
+            startService(intent);
+
+            return intent;
+        }
+
+        return null;
     }
 
     @Override
