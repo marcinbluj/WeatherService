@@ -11,7 +11,15 @@ public class Weather {
     private int pressure;
     private String city;
     private String icon;
+    private boolean state;
 
+    public boolean isState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
 
     public String getIcon() {
         return icon;

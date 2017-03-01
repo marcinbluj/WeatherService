@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private String convertDate(long date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm dd-MM-yyyy");
         String dateString = simpleDateFormat.format(date);
         return dateString;
     }
