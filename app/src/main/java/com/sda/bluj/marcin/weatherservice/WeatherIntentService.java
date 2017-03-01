@@ -1,6 +1,8 @@
 package com.sda.bluj.marcin.weatherservice;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -9,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -62,6 +65,18 @@ public class WeatherIntentService extends IntentService {
         broadcastManager.sendBroadcast(intent);
     }
 
+    private JSONObject sendRequest(String city) throws IOException, JSONException {
+        Request.Builder builder = new Request.Builder();
+        builder.url("http://api.openweathermap.org/data/2.5/weather?q="+city+"&units=metric&appid=7a4a4065de2be82b93998458ee726128");
+        builder.get();
+
+        Request request = builder.build();
+        OkHttpClient client = new OkHttpClient();
+        Response response = client.newCall(request).execute();
+
+        return new JSONObject(response.body().string());
+    }
+
     private Weather getWeatherFromJson(JSONObject body) {
         Log.i("WEATHER", body.toString());
         Weather weather = new Weather();
@@ -75,15 +90,30 @@ public class WeatherIntentService extends IntentService {
         return weather;
     }
 
-    private JSONObject sendRequest(String city) throws IOException, JSONException {
-        Request.Builder builder = new Request.Builder();
-        builder.url("http://api.openweathermap.org/data/2.5/weather?q="+city+"&units=metric&appid=7a4a4065de2be82b93998458ee726128");
-        builder.get();
-
-        Request request = builder.build();
-        OkHttpClient client = new OkHttpClient();
-        Response response = client.newCall(request).execute();
-
-        return new JSONObject(response.body().string());
-    }
+//    @Override
+//    public void onCreate() {
+//        super.onCreate();
+//
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        long alarmTime = getAlarmTime();
+//        PendingIntent pendingIntent = getAlarmPendingIntent();
+//        alarmManager.set(AlarmManager.RTC, alarmTime, pendingIntent);
+//        alarmManager.setRepeating(AlarmManager.RTC, alarmTime, 60L * 1000L, pendingIntent);
+//        alarmManager.cancel(pendingIntent);
+//    }
+//
+//    private long getAlarmTime() {
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.HOUR_OF_DAY, 15);
+//        calendar.set(Calendar.MINUTE, 38);
+//        calendar.set(Calendar.SECOND, 0);
+//        return calendar.getTimeInMillis();
+//    }
+//
+//    private PendingIntent getAlarmPendingIntent() {
+//        Intent intent = new Intent(this, MainActivity.class);
+//        PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent,
+//                PendingIntent.FLAG_CANCEL_CURRENT);
+//        return pendingIntent;
+//    }
 }
