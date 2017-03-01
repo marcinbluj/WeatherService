@@ -10,7 +10,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,12 +24,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
-    Weather weather;
 
-    WeatherAsyncTask weatherAsyncTask;
+    @BindView(R.id.icon)
+    ImageView mIcon;
 
     @BindView(R.id.main)
-    TextView mWeatherType;
+    TextView mMain;
 
     @BindView(R.id.date)
     TextView mDate;
@@ -39,8 +43,11 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.city)
     TextView mCity;
 
-    @BindView(R.id.random_button)
+    @BindView(R.id.show_weather_button)
     Button button;
+
+    @BindView(R.id.city_edit_text)
+    EditText inputText;
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -49,11 +56,19 @@ public class MainActivity extends AppCompatActivity {
             int pressure = intent.getIntExtra("PRESSURE", 0);
             String city = intent.getStringExtra("CITY");
             long date = intent.getLongExtra("DATE", 0L);
+            String icon = intent.getStringExtra("ICON");
+            String main = intent.getStringExtra("MAIN");
 
-            mTemperature.setText(temperature+"");
-            mPressure.setText(pressure+"");
             mCity.setText(city);
-            mDate.setText(convertDate(date));
+            mMain.setText("Main: "+main);
+            mTemperature.setText("Temperature: "+String.valueOf(temperature));
+            mPressure.setText("Pressure: "+String.valueOf(pressure)+" hPa");
+            mDate.setText("Date: "+convertDate(date));
+
+            Picasso.with(MainActivity.this)
+                    .load(icon)
+                    .fit()
+                    .into(MainActivity.this.mIcon);
         }
     };
 
@@ -69,17 +84,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, WeatherIntentService.class);
-                intent.setAction("GET_WEATHER");
-                intent.putExtra("CITY", "Wroclaw");
-
-                startService(intent);
-            }
-        });
-
         IntentFilter filter = new IntentFilter();
         filter.addAction("WEATHER_RESPONSE");
 
@@ -87,40 +91,24 @@ public class MainActivity extends AppCompatActivity {
         broadcastManager.registerReceiver(broadcastReceiver, filter);
     }
 
+    @OnClick(R.id.show_weather_button)
+    public void onWeatherButtonClick(View view) {
+
+        String city = inputText.getText().toString();
+
+        if (!city.isEmpty()) {
+            Intent intent = new Intent(this, WeatherIntentService.class);
+            intent.setAction("GET_WEATHER");
+            intent.putExtra("CITY", city);
+            startService(intent);
+        }
+
+    }
+
     @Override
     protected void onDestroy() {
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
         broadcastManager.unregisterReceiver(broadcastReceiver);
         super.onDestroy();
-    }
-
-    public void displayData(View view) {
-        String city;
-        switch (view.getId()) {
-            case R.id.first_button:
-                city = "Wroclaw";
-                break;
-            case R.id.second_button:
-                city = "Warszawa";
-                break;
-            case R.id.third_button:
-                city = "Krakow";
-                break;
-            default:
-                city = "Wroclaw";
-                break;
-        }
-        weatherAsyncTask = new WeatherAsyncTask(city);
-        weatherAsyncTask.setMainActivity(this);
-        weatherAsyncTask.execute();
-
-//        mDate = weather.getDate();
-//        mPressure = weather.getPressure();
-//        mCity = city;
-//        mTemperature = weather.getTemperature();
-    }
-
-    public void setWeather(Weather weather) {
-        this.weather = weather;
     }
 }

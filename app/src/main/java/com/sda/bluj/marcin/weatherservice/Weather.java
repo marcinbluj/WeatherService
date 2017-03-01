@@ -5,10 +5,29 @@ package com.sda.bluj.marcin.weatherservice;
  */
 
 public class Weather {
-    String main;
-    String date;
-    String temperature;
-    String pressure;
+    private String main;
+    private long date;
+    private double temperature;
+    private int pressure;
+    private String city;
+    private String icon;
+
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public String getMain() {
         return main;
@@ -18,27 +37,27 @@ public class Weather {
         this.main = main;
     }
 
-    public String getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
-    public String getTemperature() {
+    public double getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(String temperature) {
+    public void setTemperature(double temperature) {
         this.temperature = temperature;
     }
 
-    public String getPressure() {
+    public int getPressure() {
         return pressure;
     }
 
-    public void setPressure(String pressure) {
+    public void setPressure(int pressure) {
         this.pressure = pressure;
     }
 }
