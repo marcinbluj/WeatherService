@@ -60,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
             String main = intent.getStringExtra("MAIN");
 
             mCity.setText(city);
-            mMain.setText("Main: "+main);
-            mTemperature.setText("Temperature: "+String.valueOf(temperature));
-            mPressure.setText("Pressure: "+String.valueOf(pressure)+" hPa");
-            mDate.setText("Date: "+convertDate(date));
+            mMain.setText(String.format("Main: %s", main));
+            mTemperature.setText("Temperature: " + temperature + " C");
+            mPressure.setText("Pressure: " + pressure + " hPa");
+            mDate.setText(String.format("Date: %s", convertDate(date)));
 
             Picasso.with(MainActivity.this)
                     .load(icon)
