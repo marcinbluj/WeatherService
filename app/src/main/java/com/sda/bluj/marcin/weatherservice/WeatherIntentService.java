@@ -65,12 +65,7 @@ public class WeatherIntentService extends IntentService {
         intent.setAction("WEATHER_RESPONSE");
 
         if (weather.isState()) {
-            intent.putExtra("TEMPERATURE", weather.getTemperature());
-            intent.putExtra("PRESSURE", weather.getPressure());
-            intent.putExtra("MAIN", weather.getMain());
-            intent.putExtra("DATE", weather.getDate());
-            intent.putExtra("ICON", weather.getIcon());
-            intent.putExtra("CITY", weather.getCity());
+            fillIntentWithData(intent, weather.getTemperature(), weather.getPressure(), weather.getMain(), weather.getDate(), weather.getIcon(), weather.getCity());
 
             preferences = getSharedPreferences("weather_data", MODE_PRIVATE);
             preferences.edit()
@@ -90,16 +85,21 @@ public class WeatherIntentService extends IntentService {
             String prefIcon = preferences.getString("ICON", "none");
             String prefCity = preferences.getString("CITY", "incorrect");
 
-            intent.putExtra("TEMPERATURE", (double) prefTemperature);
-            intent.putExtra("PRESSURE", prefPressure);
-            intent.putExtra("MAIN", prefMain);
-            intent.putExtra("DATE", prefDate);
-            intent.putExtra("ICON", prefIcon);
-            intent.putExtra("CITY", prefCity);
+            fillIntentWithData(intent, (double) prefTemperature, prefPressure, prefMain, prefDate, prefIcon, prefCity);
         }
 
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
         broadcastManager.sendBroadcast(intent);
+    }
+
+    private void fillIntentWithData(Intent intent, double temperature, int pressure, String main,
+                                    long date, String icon, String city) {
+        intent.putExtra("TEMPERATURE", temperature);
+        intent.putExtra("PRESSURE", pressure);
+        intent.putExtra("MAIN", main);
+        intent.putExtra("DATE", date);
+        intent.putExtra("ICON", icon);
+        intent.putExtra("CITY", city);
     }
 
     private JSONObject sendRequest(String city) {
