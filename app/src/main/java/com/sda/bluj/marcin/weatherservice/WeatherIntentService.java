@@ -65,7 +65,8 @@ public class WeatherIntentService extends IntentService {
         intent.setAction("WEATHER_RESPONSE");
 
         if (weather.isState()) {
-            fillIntentWithData(intent, weather.getTemperature(), weather.getPressure(), weather.getMain(), weather.getDate(), weather.getIcon(), weather.getCity());
+            fillIntentWithData(intent, weather.getTemperature(), weather.getPressure(),
+                    weather.getMain(), weather.getDate(), weather.getIcon(), weather.getCity());
 
             preferences = getSharedPreferences("weather_data", MODE_PRIVATE);
             preferences.edit()
@@ -85,7 +86,8 @@ public class WeatherIntentService extends IntentService {
             String prefIcon = preferences.getString("ICON", "none");
             String prefCity = preferences.getString("CITY", "incorrect");
 
-            fillIntentWithData(intent, (double) prefTemperature, prefPressure, prefMain, prefDate, prefIcon, prefCity);
+            fillIntentWithData(intent, (double) prefTemperature, prefPressure,
+                    prefMain, prefDate, prefIcon, prefCity);
         }
 
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
