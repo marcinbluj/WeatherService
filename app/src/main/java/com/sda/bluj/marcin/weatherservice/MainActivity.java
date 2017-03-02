@@ -137,19 +137,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Intent createServiceIntent() {
-        Intent intent;
+
+        Intent intent = new Intent(this, WeatherIntentService.class);
         String city = inputText.getText().toString();
 
         if (!city.isEmpty()) {
-            intent = new Intent(this, WeatherIntentService.class);
             intent.setAction("GET_WEATHER");
             intent.putExtra("CITY", city);
             startService(intent);
-
-            return intent;
         }
 
-        return null;
+        return intent;
     }
 
     @Override
